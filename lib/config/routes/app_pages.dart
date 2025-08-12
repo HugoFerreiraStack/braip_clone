@@ -1,3 +1,5 @@
+import 'package:braip_clone/features/login/presentations/bindings/login_binding.dart';
+import 'package:braip_clone/features/login/presentations/pages/login_page.dart';
 import 'package:braip_clone/features/splash/presentations/bindings/splash_binding.dart';
 import 'package:braip_clone/features/splash/presentations/pages/splash_page.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,11 @@ abstract class AppPages {
       name: Routes.splash,
       page: () => const SplashPage(),
       binding: SplashBinding(),
+    ),
+    GetPage(
+      name: Routes.login,
+      page: () => const LoginPage(),
+      binding: LoginBinding(),
     ),
  
   ];
