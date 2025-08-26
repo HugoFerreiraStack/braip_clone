@@ -1,5 +1,6 @@
 import 'package:braip_clone/features/home/presentations/bindings/home_binding.dart';
 import 'package:braip_clone/features/home/presentations/pages/home_page.dart';
+import 'package:braip_clone/features/home/presentations/pages/loja_page.dart';
 import 'package:braip_clone/features/login/presentations/bindings/login_binding.dart';
 import 'package:braip_clone/features/login/presentations/pages/login_page.dart';
 import 'package:braip_clone/features/splash/presentations/bindings/splash_binding.dart';
@@ -26,6 +27,10 @@ abstract class AppPages {
       name: Routes.home,
       page: () => const HomePage(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: Routes.loja,
+      page: () => const LojaPage(),
     ),
  
   ];

@@ -7,4 +7,5 @@ abstract class Routes {
   static const register = '/register';
   static const profile = '/profile';
   static const settings = '/settings';
+  static const loja = '/loja';
 }
