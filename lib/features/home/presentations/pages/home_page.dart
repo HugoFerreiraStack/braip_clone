@@ -1,6 +1,6 @@
 import 'package:braip_clone/features/home/widgets/drawer_menu.dart';
 import 'package:braip_clone/features/home/widgets/custom_appbar.dart';
-import 'package:braip_clone/features/home/widgets/icon_card_widget.dart';
+import 'package:braip_clone/features/home/widgets/product_list_item.dart';
 import 'package:braip_clone/features/home/presentations/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -156,39 +156,64 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-
-
-          // Icon Card Widget
-          const IconCardWidget(),
-
-          const SizedBox(height: 30),
-
-          // Paginação
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          // Título da seção Loja
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('< Previous', style: TextStyle(color: Colors.black87)),
+                const SizedBox(height: 20),
+                const Text(
+                  'Loja',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
-                const SizedBox(width: 20),
-                _buildPageNumber(1, false),
-                const SizedBox(width: 10),
-                _buildPageNumber(2, true), // Página atual
-                const SizedBox(width: 10),
-                _buildPageNumber(3, false),
-                const SizedBox(width: 10),
-                const Text('...', style: TextStyle(color: Colors.black87)),
-                const SizedBox(width: 20),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('Next >', style: TextStyle(color: Colors.black87)),
-                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
+
+                              // Lista de produtos
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 3, // Número de produtos para exibir
+                      itemBuilder: (context, index) {
+                        return ProductListItem(
+                          key: ValueKey('product_$index'),
+                        );
+                      },
+                    ),
+
+                    // Paginação
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () {},
+                            child: const Text('< Previous', style: TextStyle(color: Colors.black87)),
+                          ),
+                          const SizedBox(width: 20),
+                          _buildPageNumber(1, false),
+                          const SizedBox(width: 10),
+                          _buildPageNumber(2, true), // Página atual
+                          const SizedBox(width: 10),
+                          _buildPageNumber(3, false),
+                          const SizedBox(width: 10),
+                          const Text('...', style: TextStyle(color: Colors.black87)),
+                          const SizedBox(width: 20),
+                          TextButton(
+                            onPressed: () {},
+                            child: const Text('Next >', style: TextStyle(color: Colors.black87)),
+                          ),
+                        ],
+                      ),
+                    ),
         ],
       ),
     );

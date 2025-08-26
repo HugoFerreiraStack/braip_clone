@@ -8,7 +8,7 @@ class IconCardWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 230,
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
         // Borda externa sólida azul
      
