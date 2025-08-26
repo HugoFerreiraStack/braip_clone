@@ -75,13 +75,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
           ),
         ),
       ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(2),
-        child: Container(
-          height: 2,
-          color: const Color(0xFF6B46C1),
-        ),
-      ),
+
     );
   }
 }

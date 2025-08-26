@@ -1,10 +1,9 @@
 import 'package:braip_clone/config/themes/app_colors.dart';
-import 'package:braip_clone/features/login/presentations/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginPage extends GetView<LoginController> {
-  const LoginPage({super.key});
+class CadastroPage extends StatelessWidget {
+  const CadastroPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class LoginPage extends GetView<LoginController> {
                 children: [
                   // Header Section
                   const Text(
-                    'Entrar',
+                    'Criar Conta',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -30,7 +29,7 @@ class LoginPage extends GetView<LoginController> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Seja bem-vindo de volta.',
+                    'Preencha os dados para começar.',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black54,
@@ -39,6 +38,11 @@ class LoginPage extends GetView<LoginController> {
                   const SizedBox(height: 48),
 
                   // Input Fields
+                  _buildInputField(
+                    hintText: 'Digite seu nome completo',
+                    prefixIcon: Icons.person,
+                  ),
+                  const SizedBox(height: 20),
                   _buildInputField(
                     hintText: 'Digite seu e-mail',
                     prefixIcon: Icons.email,
@@ -49,15 +53,21 @@ class LoginPage extends GetView<LoginController> {
                     prefixIcon: Icons.lock,
                     isPassword: true,
                   ),
+                  const SizedBox(height: 20),
+                  _buildInputField(
+                    hintText: 'Confirme sua senha',
+                    prefixIcon: Icons.lock,
+                    isPassword: true,
+                  ),
                   const SizedBox(height: 32),
 
-                  // Primary Login Button
+                  // Primary Register Button
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        controller.login();
+                        // TODO: Implementar cadastro
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -68,7 +78,7 @@ class LoginPage extends GetView<LoginController> {
                         elevation: 0,
                       ),
                       child: const Text(
-                        'Entrar',
+                        'Criar Conta',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -78,13 +88,13 @@ class LoginPage extends GetView<LoginController> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Secondary Button (Create Account)
+                  // Secondary Button (Back to Login)
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: OutlinedButton(
                       onPressed: () {
-                        Get.toNamed('/cadastro');
+                        Get.back(); // Volta para a página de login
                       },
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.tertiary,
@@ -97,7 +107,7 @@ class LoginPage extends GetView<LoginController> {
                         ),
                       ),
                       child: const Text(
-                        'Criar uma conta',
+                        'Voltar para Login',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -107,18 +117,19 @@ class LoginPage extends GetView<LoginController> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Forgot Password Link
+                  // Terms and Conditions
                   TextButton(
                     onPressed: () {
-                      // TODO: Implementar funcionalidade de esqueci senha
+                      // TODO: Implementar visualização dos termos
                     },
                     child: Text(
-                      'Esqueci minha senha',
+                      'Ao criar uma conta, você concorda com nossos Termos de Uso',
                       style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.w400,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],

@@ -5,6 +5,8 @@ import 'package:braip_clone/features/login/presentations/bindings/login_binding.
 import 'package:braip_clone/features/login/presentations/pages/login_page.dart';
 import 'package:braip_clone/features/splash/presentations/bindings/splash_binding.dart';
 import 'package:braip_clone/features/splash/presentations/pages/splash_page.dart';
+import 'package:braip_clone/features/cadastro/presentations/bindings/cadastro_binding.dart';
+import 'package:braip_clone/features/cadastro/presentations/pages/cadastro_page.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -32,6 +34,10 @@ abstract class AppPages {
       name: Routes.loja,
       page: () => const LojaPage(),
     ),
- 
+    GetPage(
+      name: Routes.cadastro,
+      page: () => const CadastroPage(),
+      binding: CadastroBinding(),
+    ),
   ];
 }

@@ -1,6 +1,8 @@
 import 'package:braip_clone/features/home/widgets/drawer_menu.dart';
 import 'package:braip_clone/features/home/widgets/custom_appbar.dart';
 import 'package:braip_clone/features/home/widgets/product_list_item.dart';
+import 'package:braip_clone/features/home/widgets/product_steps_widget.dart';
+import 'package:braip_clone/features/home/widgets/product_details_form_widget.dart';
 import 'package:braip_clone/features/home/presentations/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +13,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
-    
+
     return Scaffold(
       appBar: const CustomAppbar(),
       drawer: DrawerMenu(controller: controller),
@@ -27,6 +29,10 @@ class HomePage extends StatelessWidget {
         return _buildLoja();
       case HomePageType.produtos:
         return _buildProdutos();
+      case HomePageType.meusProdutos:
+        return _buildMeusProdutos();
+      case HomePageType.cadastrarProduto:
+        return _buildCadastrarProduto();
       case HomePageType.streaming:
         return _buildStreaming();
       case HomePageType.afiliacoes:
@@ -70,7 +76,7 @@ class HomePage extends StatelessWidget {
   Widget _buildLoja() {
     final PageController pageController = PageController();
     final RxInt currentPageIndex = 0.obs;
-    
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,22 +141,24 @@ class HomePage extends StatelessWidget {
                   bottom: 10,
                   left: 0,
                   right: 0,
-                  child: Obx(() => Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(3, (index) {
-                      return Container(
-                        width: 8,
-                        height: 8,
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: currentPageIndex.value == index 
-                              ? Colors.white 
-                              : Colors.white.withOpacity(0.4),
-                        ),
-                      );
-                    }),
-                  )),
+                  child: Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(3, (index) {
+                        return Container(
+                          width: 8,
+                          height: 8,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: currentPageIndex.value == index
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.4),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -176,44 +184,48 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-                              // Lista de produtos
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 3, // Número de produtos para exibir
-                      itemBuilder: (context, index) {
-                        return ProductListItem(
-                          key: ValueKey('product_$index'),
-                        );
-                      },
-                    ),
+          // Lista de produtos
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 3, // Número de produtos para exibir
+            itemBuilder: (context, index) {
+              return ProductListItem(key: ValueKey('product_$index'));
+            },
+          ),
 
-                    // Paginação
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text('< Previous', style: TextStyle(color: Colors.black87)),
-                          ),
-                          const SizedBox(width: 20),
-                          _buildPageNumber(1, false),
-                          const SizedBox(width: 10),
-                          _buildPageNumber(2, true), // Página atual
-                          const SizedBox(width: 10),
-                          _buildPageNumber(3, false),
-                          const SizedBox(width: 10),
-                          const Text('...', style: TextStyle(color: Colors.black87)),
-                          const SizedBox(width: 20),
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text('Next >', style: TextStyle(color: Colors.black87)),
-                          ),
-                        ],
-                      ),
-                    ),
+          // Paginação
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    '< Previous',
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                _buildPageNumber(1, false),
+                const SizedBox(width: 10),
+                _buildPageNumber(2, true), // Página atual
+                const SizedBox(width: 10),
+                _buildPageNumber(3, false),
+                const SizedBox(width: 10),
+                const Text('...', style: TextStyle(color: Colors.black87)),
+                const SizedBox(width: 20),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'Next >',
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -239,6 +251,109 @@ class HomePage extends StatelessWidget {
             'Gerencie seus produtos aqui',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMeusProdutos() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.inventory, size: 64, color: Color(0xFF6B46C1)),
+          SizedBox(height: 16),
+          Text(
+            'Meus Produtos',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF6B46C1),
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            'Visualize e gerencie seus produtos cadastrados',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCadastrarProduto() {
+    final PageController pageController = PageController();
+    final RxInt currentPageIndex = 0.obs;
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Banner promocional - Carousel (idêntico ao da Loja)
+          Container(
+            margin: const EdgeInsets.all(20),
+            height: 200,
+            child: Stack(
+              children: [
+                // Carousel de imagens
+                PageView.builder(
+                  controller: pageController,
+                  itemCount: 3,
+                  onPageChanged: (index) {
+                    currentPageIndex.value = index;
+                  },
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: const DecorationImage(
+                          image: AssetImage('assets/news.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                // Indicadores de página
+                Positioned(
+                  bottom: 10,
+                  left: 0,
+                  right: 0,
+                  child: Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(3, (index) {
+                        return Container(
+                          width: 8,
+                          height: 8,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: currentPageIndex.value == index
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.4),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Widget de Steps para Cadastro
+          ProductStepsWidget(
+            currentStep: 0, // Começa no primeiro step
+            onStepChanged: (stepIndex) {
+              // TODO: Implementar navegação entre steps
+              print('Mudou para o step: $stepIndex');
+            },
+          ),
+
+          // Formulário de Detalhes do Produto
+          const ProductDetailsFormWidget(),
         ],
       ),
     );
@@ -418,7 +533,7 @@ class HomePage extends StatelessWidget {
             // Topo roxo com gradiente - Icon Card
             Container(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-              height:   230,
+              height: 230,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -483,10 +598,7 @@ class HomePage extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Código: pro9y89x',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   const SizedBox(height: 20),
 
@@ -555,18 +667,12 @@ class HomePage extends StatelessWidget {
                   const SizedBox(height: 20),
                   const Text(
                     'Categoria: Marketing e Comunicação',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.black87),
                   ),
                   const SizedBox(height: 8),
                   const Text(
                     'Produtor: Tamiris De Cezaro',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.black87),
                   ),
                   const SizedBox(height: 8),
                   const Text(

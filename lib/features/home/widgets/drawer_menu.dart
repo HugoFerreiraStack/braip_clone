@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:braip_clone/features/home/presentations/controllers/home_controller.dart';
 
-class DrawerMenu extends StatelessWidget {
+class DrawerMenu extends StatefulWidget {
   final HomeController controller;
   
   const DrawerMenu({super.key, required this.controller});
+
+  @override
+  State<DrawerMenu> createState() => _DrawerMenuState();
+}
+
+class _DrawerMenuState extends State<DrawerMenu> {
+  bool _produtosExpanded = false;
+  bool _afiliacoesExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +87,7 @@ class DrawerMenu extends StatelessWidget {
                       icon: Icons.dashboard,
                       title: 'Dashboard',
                       onTap: () {
-                        controller.changePage(HomePageType.dashboard);
+                        widget.controller.changePage(HomePageType.dashboard);
                         Navigator.pop(context);
                       },
                     ),
@@ -87,41 +95,62 @@ class DrawerMenu extends StatelessWidget {
                       icon: Icons.store,
                       title: 'Loja',
                       onTap: () {
-                        controller.changePage(HomePageType.loja);
+                        widget.controller.changePage(HomePageType.loja);
                         Navigator.pop(context);
                       },
                     ),
-                    _buildMenuItem(
+                    _buildExpandableMenuItem(
                       icon: Icons.shopping_basket,
                       title: 'Produtos',
+                      isExpanded: _produtosExpanded,
                       onTap: () {
-                        controller.changePage(HomePageType.produtos);
-                        Navigator.pop(context);
+                        setState(() {
+                          _produtosExpanded = !_produtosExpanded;
+                        });
                       },
-                      hasSubmenu: true,
+                      children: [
+                        _buildSubMenuItem(
+                          icon: Icons.inventory,
+                          title: 'Meus Produtos',
+                          onTap: () {
+                            widget.controller.changePage(HomePageType.meusProdutos);
+                            Navigator.pop(context);
+                          },
+                        ),
+                        _buildSubMenuItem(
+                          icon: Icons.add_circle_outline,
+                          title: 'Cadastrar Produto',
+                          onTap: () {
+                            widget.controller.changePage(HomePageType.cadastrarProduto);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
                     ),
                     _buildMenuItem(
                       icon: Icons.play_circle_outline,
                       title: 'Streaming',
                       onTap: () {
-                        controller.changePage(HomePageType.streaming);
+                        widget.controller.changePage(HomePageType.streaming);
                         Navigator.pop(context);
                       },
                     ),
-                    _buildMenuItem(
+                    _buildExpandableMenuItem(
                       icon: Icons.people,
                       title: 'Afiliações',
+                      isExpanded: _afiliacoesExpanded,
                       onTap: () {
-                        controller.changePage(HomePageType.afiliacoes);
-                        Navigator.pop(context);
+                        setState(() {
+                          _afiliacoesExpanded = !_afiliacoesExpanded;
+                        });
                       },
-                      hasSubmenu: true,
+                      children: const [],
                     ),
                     _buildMenuItem(
                       icon: Icons.person_outline,
                       title: 'Responsáveis',
                       onTap: () {
-                        controller.changePage(HomePageType.responsaveis);
+                        widget.controller.changePage(HomePageType.responsaveis);
                         Navigator.pop(context);
                       },
                     ),
@@ -129,7 +158,7 @@ class DrawerMenu extends StatelessWidget {
                       icon: Icons.build,
                       title: 'Ferramentas',
                       onTap: () {
-                        controller.changePage(HomePageType.ferramentas);
+                        widget.controller.changePage(HomePageType.ferramentas);
                         Navigator.pop(context);
                       },
                     ),
@@ -137,7 +166,7 @@ class DrawerMenu extends StatelessWidget {
                       icon: Icons.bar_chart,
                       title: 'Relatórios',
                       onTap: () {
-                        controller.changePage(HomePageType.relatorios);
+                        widget.controller.changePage(HomePageType.relatorios);
                         Navigator.pop(context);
                       },
                     ),
@@ -145,7 +174,7 @@ class DrawerMenu extends StatelessWidget {
                       icon: Icons.settings,
                       title: 'Configurações',
                       onTap: () {
-                        controller.changePage(HomePageType.configuracoes);
+                        widget.controller.changePage(HomePageType.configuracoes);
                         Navigator.pop(context);
                       },
                     ),
@@ -163,7 +192,6 @@ class DrawerMenu extends StatelessWidget {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
-    bool hasSubmenu = false,
   }) {
     return ListTile(
       leading: Icon(icon, color: Colors.white, size: 24),
@@ -175,11 +203,65 @@ class DrawerMenu extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
-      trailing: hasSubmenu
-          ? const Icon(Icons.keyboard_arrow_down, color: Colors.white)
-          : null,
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+    );
+  }
+
+  Widget _buildExpandableMenuItem({
+    required IconData icon,
+    required String title,
+    required bool isExpanded,
+    required VoidCallback onTap,
+    required List<Widget> children,
+  }) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(icon, color: Colors.white, size: 24),
+          title: Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          trailing: Icon(
+            isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+            color: Colors.white,
+          ),
+          onTap: onTap,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        ),
+        if (isExpanded) ...children,
+      ],
+    );
+  }
+
+  Widget _buildSubMenuItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: const SizedBox(width: 24), // Espaçamento para alinhar com o item pai
+      title: Row(
+        children: [
+          Icon(icon, color: Colors.white, size: 20),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
     );
   }
 }

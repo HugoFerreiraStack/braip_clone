@@ -4,6 +4,8 @@ enum HomePageType {
   dashboard,
   loja,
   produtos,
+  meusProdutos,
+  cadastrarProduto,
   streaming,
   afiliacoes,
   responsaveis,
@@ -27,6 +29,10 @@ class HomeController extends GetxController {
         return 'Loja';
       case HomePageType.produtos:
         return 'Produtos';
+      case HomePageType.meusProdutos:
+        return 'Meus Produtos';
+      case HomePageType.cadastrarProduto:
+        return 'Cadastrar Produto';
       case HomePageType.streaming:
         return 'Streaming';
       case HomePageType.afiliacoes:
