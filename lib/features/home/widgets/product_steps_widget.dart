@@ -5,11 +5,13 @@ import 'package:braip_clone/config/themes/app_assets.dart';
 class ProductStepsWidget extends StatelessWidget {
   final int currentStep;
   final Function(int) onStepChanged;
+  final VoidCallback? onContinue;
 
   const ProductStepsWidget({
     super.key,
     required this.currentStep,
     required this.onStepChanged,
+    this.onContinue,
   });
 
   @override

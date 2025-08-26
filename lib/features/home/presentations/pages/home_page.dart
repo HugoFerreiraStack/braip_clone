@@ -3,7 +3,10 @@ import 'package:braip_clone/features/home/widgets/custom_appbar.dart';
 import 'package:braip_clone/features/home/widgets/product_list_item.dart';
 import 'package:braip_clone/features/home/widgets/product_steps_widget.dart';
 import 'package:braip_clone/features/home/widgets/product_details_form_widget.dart';
+import 'package:braip_clone/features/home/widgets/sales_details_section.dart';
+import 'package:braip_clone/features/home/widgets/plans_section.dart';
 import 'package:braip_clone/features/home/presentations/controllers/home_controller.dart';
+import 'package:braip_clone/config/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -284,6 +287,7 @@ class HomePage extends StatelessWidget {
   Widget _buildCadastrarProduto() {
     final PageController pageController = PageController();
     final RxInt currentPageIndex = 0.obs;
+    final RxInt currentStep = 0.obs;
 
     return SingleChildScrollView(
       child: Column(
@@ -344,18 +348,234 @@ class HomePage extends StatelessWidget {
           ),
 
           // Widget de Steps para Cadastro
-          ProductStepsWidget(
-            currentStep: 0, // Começa no primeiro step
-            onStepChanged: (stepIndex) {
-              // TODO: Implementar navegação entre steps
-              print('Mudou para o step: $stepIndex');
-            },
+          Obx(
+            () => ProductStepsWidget(
+              currentStep: currentStep.value,
+              onStepChanged: (stepIndex) {
+                currentStep.value = stepIndex;
+              },
+              onContinue: () {
+                if (currentStep.value < 4) {
+                  currentStep.value++;
+                }
+              },
+            ),
           ),
 
-          // Formulário de Detalhes do Produto
-          const ProductDetailsFormWidget(),
+          // Formulário baseado no step atual
+          Obx(() {
+            switch (currentStep.value) {
+              case 0:
+                return ProductDetailsFormWidget(
+                  onContinue: () {
+                    if (currentStep.value < 4) {
+                      currentStep.value++;
+                    }
+                  },
+                );
+              case 1:
+                return Column(
+                  children: [
+                    const SalesDetailsSection(),
+                    const PlansSection(),
+                    _buildSalesSettingsForm(),
+                  ],
+                );
+              default:
+                return const SizedBox.shrink();
+            }
+          }),
         ],
       ),
+    );
+  }
+
+  Widget _buildSalesSettingsForm() {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          // Páginas
+          const Text(
+            'Páginas',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // URL da página de vendas
+          _buildUrlField(
+            label: 'URL da página de vendas',
+            isRequired: true,
+            initialValue: 'https://exemplo.com',
+          ),
+
+          const SizedBox(height: 20),
+
+          // URL da página de obrigado
+          _buildUrlField(
+            label: 'URL da página de obrigado',
+            isRequired: true,
+            initialValue: 'https://exemplo.com',
+          ),
+
+          const SizedBox(height: 20),
+
+          // URL da página do reclame aqui
+          _buildUrlField(
+            label: 'URL da página do reclame aqui',
+            isRequired: false,
+            initialValue: 'https://exemplo.com',
+            helperText: 'Se não cadastrado, o produto não poderá ser aprovado.',
+          ),
+
+          const SizedBox(height: 20),
+
+          // E-mail de suporte
+          _buildUrlField(
+            label: 'E-mail de suporte',
+            isRequired: false,
+            initialValue: '',
+            helperText:
+                'Se não cadastrado, será usado o mesmo endereço de e-mail de seu login.',
+          ),
+
+          const SizedBox(height: 32),
+
+          // Botões de ação
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 56,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // TODO: Implementar voltar para step anterior
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.grey[700],
+                      side: BorderSide(color: Colors.grey[300]!, width: 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Voltar',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // TODO: Implementar continuar para próximo step
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF6B46C1),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Continuar',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUrlField({
+    required String label,
+    required bool isRequired,
+    required String initialValue,
+    String? helperText,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            if (isRequired) ...[
+              const SizedBox(width: 4),
+              const Text(
+                '*',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          initialValue: initialValue,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color(0xFFF0F2F5),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+          ),
+        ),
+        if (helperText != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            helperText,
+            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+          ),
+        ],
+      ],
     );
   }
 

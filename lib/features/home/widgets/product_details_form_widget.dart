@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ProductDetailsFormWidget extends StatelessWidget {
-  const ProductDetailsFormWidget({super.key});
+  final VoidCallback? onContinue;
+  
+  const ProductDetailsFormWidget({super.key, this.onContinue});
 
   @override
   Widget build(BuildContext context) {
@@ -196,9 +198,7 @@ class ProductDetailsFormWidget extends StatelessWidget {
             width: double.infinity,
             height: 56,
             child: ElevatedButton(
-              onPressed: () {
-                // TODO: Implementar ação de continuar para o próximo step
-              },
+              onPressed: onContinue,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6B46C1),
                 foregroundColor: Colors.white,
