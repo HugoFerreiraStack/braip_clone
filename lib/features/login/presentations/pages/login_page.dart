@@ -37,7 +37,9 @@ class LoginPage extends GetView<LoginController> {
                   ),
                   const SizedBox(height: 24),
                   CustomButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.login();
+                    },
                     backgroundColor: AppColors.secondary,
                     child: const Text(
                       'Informe suas credenciais',
