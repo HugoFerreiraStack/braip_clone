@@ -26,15 +26,17 @@ class _CustomAppbarState extends State<CustomAppbar> {
       ),
       title: Row(
         children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.visibility_off, color: Colors.black87),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
+          Expanded(
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.visibility_off, color: Colors.black87),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           const Icon(Icons.attach_money, color: Colors.black87, size: 20),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Row(
             children: [
               Text(
@@ -48,7 +50,11 @@ class _CustomAppbarState extends State<CustomAppbar> {
               const SizedBox(width: 4),
               const Icon(Icons.flag, color: Colors.green, size: 16),
               const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down, color: Colors.black87, size: 16),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                color: Colors.black87,
+                size: 16,
+              ),
             ],
           ),
         ],
@@ -67,15 +73,10 @@ class _CustomAppbarState extends State<CustomAppbar> {
           child: const CircleAvatar(
             radius: 18,
             backgroundColor: Color(0xFF6B46C1),
-            child: Icon(
-              Icons.person,
-              color: Colors.white,
-              size: 20,
-            ),
+            child: Icon(Icons.person, color: Colors.white, size: 20),
           ),
         ),
       ],
-
     );
   }
 }

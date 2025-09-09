@@ -1,3 +1,4 @@
+import 'package:braip_clone/features/home/presentations/pages/widgets/responsaveis_card.dart';
 import 'package:braip_clone/features/home/widgets/drawer_menu.dart';
 import 'package:braip_clone/features/home/widgets/custom_appbar.dart';
 import 'package:braip_clone/features/home/widgets/product_list_item.dart';
@@ -6,7 +7,6 @@ import 'package:braip_clone/features/home/widgets/product_details_form_widget.da
 import 'package:braip_clone/features/home/widgets/sales_details_section.dart';
 import 'package:braip_clone/features/home/widgets/plans_section.dart';
 import 'package:braip_clone/features/home/presentations/controllers/home_controller.dart';
-import 'package:braip_clone/config/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -409,7 +409,6 @@ class HomePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           // Páginas
           const Text(
             'Páginas',
@@ -630,24 +629,116 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildResponsaveis() {
-    return const Center(
+    final PageController pageController = PageController();
+    final RxInt currentPageIndex = 0.obs;
+
+    return SingleChildScrollView(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.person_outline, size: 64, color: Color(0xFF6B46C1)),
-          SizedBox(height: 16),
-          Text(
-            'Responsáveis',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF6B46C1),
+          // Seção de boas-vindas
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Olá, Arthur Neves Sousa Cipriano',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Seja bem vindo!',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: const Color(0xFF6B46C1),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 8),
-          Text(
-            'Lista de responsáveis',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+
+          // Banner promocional - Carousel
+          Container(
+            margin: const EdgeInsets.all(20),
+            height: 200,
+            child: Stack(
+              children: [
+                // Carousel de imagens
+                PageView.builder(
+                  controller: pageController,
+                  itemCount: 3,
+                  onPageChanged: (index) {
+                    currentPageIndex.value = index;
+                  },
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: const DecorationImage(
+                          image: AssetImage('assets/news.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                // Indicadores de página
+                Positioned(
+                  bottom: 18,
+                  left: 0,
+                  right: 0,
+                  child: Obx(
+                    () => _PageSegmentsIndicator(
+                      count: 3, // mesmo do itemCount do PageView
+                      current: currentPageIndex.value,
+                      height: 4, // "fino"
+                      spacing: 6, // distância entre retângulos
+                      radius: 8, // borda arredondada
+                      paddingHorizontal: 50, // margem lateral opcional
+                      activeColor: Colors.black54,
+                      inactiveColor: Colors.white.withOpacity(0.35),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Título da seção Loja
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                const Text(
+                  'Responsáveis',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: ResponsaveisCard(
+              onAdd: () {
+                print('test F ');
+              },
+            ),
           ),
         ],
       ),
@@ -955,6 +1046,64 @@ class HomePage extends StatelessWidget {
             fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PageSegmentsIndicator extends StatelessWidget {
+  const _PageSegmentsIndicator({
+    required this.count,
+    required this.current,
+    this.height = 4,
+    this.spacing = 6,
+    this.radius = 8,
+    this.paddingHorizontal = 0,
+    this.activeColor = Colors.white,
+    this.inactiveColor = const Color(0x66FFFFFF),
+  });
+
+  final int count;
+  final int current;
+  final double height;
+  final double spacing;
+  final double radius;
+  final double paddingHorizontal;
+  final Color activeColor;
+  final Color inactiveColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final totalSpacing = spacing * (count - 1);
+          final maxWidth = constraints.maxWidth;
+          final segWidth = ((maxWidth - totalSpacing) / count).clamp(
+            0.0,
+            double.infinity,
+          );
+
+          return Row(
+            children: List.generate(count, (i) {
+              final selected = i == current;
+              return Padding(
+                padding: EdgeInsets.only(right: i < count - 1 ? spacing : 0),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOut,
+                  width: segWidth, // ocupa o máximo possível por segmento
+                  height: height, // retângulo fino
+                  decoration: BoxDecoration(
+                    color: selected ? activeColor : inactiveColor,
+                    borderRadius: BorderRadius.circular(radius),
+                  ),
+                ),
+              );
+            }),
+          );
+        },
       ),
     );
   }
