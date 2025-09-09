@@ -9,7 +9,8 @@ class ProductListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5), child:Card(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
       child: Column(
         children: [
           // Icon Card
@@ -23,11 +24,8 @@ class ProductListItem extends StatelessWidget {
 
           // Informações do Produto e Botão
           const ProductInfoWidget(),
-
-          // Espaçamento para o próximo item
-          const SizedBox(height: 20),
         ],
       ),
-    ) ,);
+    );
   }
 }

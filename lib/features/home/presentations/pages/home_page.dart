@@ -1,6 +1,8 @@
+import 'package:braip_clone/config/themes/app_colors.dart';
 import 'package:braip_clone/features/home/presentations/pages/widgets/responsaveis_card.dart';
 import 'package:braip_clone/features/home/widgets/drawer_menu.dart';
 import 'package:braip_clone/features/home/widgets/custom_appbar.dart';
+import 'package:braip_clone/features/home/widgets/my_products_list.dart';
 import 'package:braip_clone/features/home/widgets/product_list_item.dart';
 import 'package:braip_clone/features/home/widgets/product_steps_widget.dart';
 import 'package:braip_clone/features/home/widgets/product_details_form_widget.dart';
@@ -260,24 +262,192 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildMeusProdutos() {
-    return const Center(
+    final PageController pageController = PageController();
+    final RxInt currentPageIndex = 0.obs;
+
+    return SingleChildScrollView(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.inventory, size: 64, color: Color(0xFF6B46C1)),
-          SizedBox(height: 16),
-          Text(
-            'Meus Produtos',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF6B46C1),
+          // Banner promocional - Carousel
+          Container(
+            margin: const EdgeInsets.all(20),
+            height: 200,
+            child: Stack(
+              children: [
+                // Carousel de imagens
+                PageView.builder(
+                  controller: pageController,
+                  itemCount: 3,
+                  onPageChanged: (index) {
+                    currentPageIndex.value = index;
+                  },
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: const DecorationImage(
+                          image: AssetImage('assets/news.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                // Indicadores de página
+                Positioned(
+                  bottom: 18,
+                  left: 0,
+                  right: 0,
+                  child: Obx(
+                    () => _PageSegmentsIndicator(
+                      count: 3, // mesmo do itemCount do PageView
+                      current: currentPageIndex.value,
+                      height: 4, // "fino"
+                      spacing: 6, // distância entre retângulos
+                      radius: 8, // borda arredondada
+                      paddingHorizontal: 50, // margem lateral opcional
+                      activeColor: Colors.black54,
+                      inactiveColor: Colors.white.withOpacity(0.35),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 8),
-          Text(
-            'Visualize e gerencie seus produtos cadastrados',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+
+          // Título da seção Loja
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                const Text(
+                  'Meus Produtos',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+
+          // Lista de produtos
+          Container(
+            margin: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.auto_awesome_mosaic_outlined),
+                      SizedBox(width: 4),
+                      const Text(
+                        'Todos os produtos',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Spacer(),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.tertiary,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                            vertical: 2,
+                          ),
+                          child: Text(
+                            'Novo Produto',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Text(
+                  'Por padrão o carregamento inicial do filtro busca por status.',
+                  style: TextStyle(fontSize: 13, color: Colors.grey),
+                ),
+                const Text(
+                  'APROVADO, PENDENTE E AGUARDANDO ALTERAÇÃO.',
+                  style: TextStyle(fontSize: 14, color: AppColors.secondary),
+                ),
+                Divider(color: Colors.grey.shade200, indent: 20, endIndent: 20),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 3, // Número de produtos para exibir
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                          border: BoxBorder.all(
+                            width: 1,
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                        child: MyProductsList(key: ValueKey('product_$index')),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          // Paginação
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    '< Previous',
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                _buildPageNumber(1, false),
+                const SizedBox(width: 10),
+                _buildPageNumber(2, true), // Página atual
+                const SizedBox(width: 10),
+                _buildPageNumber(3, false),
+                const SizedBox(width: 10),
+                const Text('...', style: TextStyle(color: Colors.black87)),
+                const SizedBox(width: 20),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'Next >',
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
