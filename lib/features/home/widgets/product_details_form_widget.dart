@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ProductDetailsFormWidget extends StatelessWidget {
   final VoidCallback? onContinue;
-  
+
   const ProductDetailsFormWidget({super.key, this.onContinue});
 
   @override
@@ -43,10 +43,7 @@ class ProductDetailsFormWidget extends StatelessWidget {
             child: TextFormField(
               decoration: InputDecoration(
                 hintText: 'Digite o nome do produto',
-                hintStyle: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 14,
-                ),
+                hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
                 filled: true,
                 fillColor: const Color(0xFFF0F2F5),
                 border: OutlineInputBorder(
@@ -71,10 +68,7 @@ class ProductDetailsFormWidget extends StatelessWidget {
               maxLines: 4,
               decoration: InputDecoration(
                 hintText: 'Digite a descrição do produto',
-                hintStyle: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 14,
-                ),
+                hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
                 filled: true,
                 fillColor: const Color(0xFFF0F2F5),
                 border: OutlineInputBorder(
@@ -106,10 +100,7 @@ class ProductDetailsFormWidget extends StatelessWidget {
                   Expanded(
                     child: Text(
                       'Selecione uma categoria...',
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.grey[500], fontSize: 14),
                     ),
                   ),
                   Icon(
@@ -131,10 +122,7 @@ class ProductDetailsFormWidget extends StatelessWidget {
             child: TextFormField(
               decoration: InputDecoration(
                 hintText: 'Digite as tags do produto',
-                hintStyle: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 14,
-                ),
+                hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
                 filled: true,
                 fillColor: const Color(0xFFF0F2F5),
                 border: OutlineInputBorder(
@@ -209,10 +197,7 @@ class ProductDetailsFormWidget extends StatelessWidget {
               ),
               child: const Text(
                 'Continuar',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
           ),

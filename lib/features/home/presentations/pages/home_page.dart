@@ -1,8 +1,11 @@
 import 'package:braip_clone/config/themes/app_colors.dart';
 import 'package:braip_clone/features/home/presentations/pages/widgets/responsaveis_card.dart';
+import 'package:braip_clone/features/home/widgets/affiliation_section.dart';
+import 'package:braip_clone/features/home/widgets/delivery_section.dart';
 import 'package:braip_clone/features/home/widgets/drawer_menu.dart';
 import 'package:braip_clone/features/home/widgets/custom_appbar.dart';
 import 'package:braip_clone/features/home/widgets/my_products_list.dart';
+import 'package:braip_clone/features/home/widgets/packaging_section.dart';
 import 'package:braip_clone/features/home/widgets/product_list_item.dart';
 import 'package:braip_clone/features/home/widgets/product_steps_widget.dart';
 import 'package:braip_clone/features/home/widgets/product_details_form_widget.dart';
@@ -550,6 +553,15 @@ class HomePage extends StatelessWidget {
                     const PlansSection(),
                     _buildSalesSettingsForm(),
                   ],
+                );
+              case 2:
+                return PackagingSection();
+              case 3:
+                return DeliverySection();
+              case 4:
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [AffiliationSection()],
                 );
               default:
                 return const SizedBox.shrink();
