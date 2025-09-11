@@ -45,8 +45,8 @@ class _EmbalagemPesoCardState extends State<PackagingSection> {
                 // Título com ícone
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.inventory_2_rounded, color: roxo, size: 22),
+                  children: [
+                    Image.asset('assets/open_box_purple.png'),
                     SizedBox(width: 8),
                     Expanded(
                       child: Text(

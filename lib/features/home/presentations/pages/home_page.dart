@@ -13,6 +13,7 @@ import 'package:braip_clone/features/home/widgets/sales_details_section.dart';
 import 'package:braip_clone/features/home/widgets/plans_section.dart';
 import 'package:braip_clone/features/home/presentations/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
@@ -57,18 +58,243 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildDashboard() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.dashboard, size: 64, color: Color(0xFF6B46C1)),
+          IconButton(
+            icon: Icon(Icons.dashboard, size: 64, color: Color(0xFF6B46C1)),
+            onPressed: () {
+              final nomeController = TextEditingController();
+              final valorController = TextEditingController();
+              String? formaCobranca;
+
+              showDialog(
+                context: Get.context!,
+                barrierDismissible: false,
+                builder: (context) {
+                  return Dialog(
+                    insetPadding: EdgeInsets.all(12),
+                    backgroundColor: Colors.white,
+                    child: StatefulBuilder(
+                      builder: (context, setState) {
+                        InputDecoration baseDecoration(String hint) =>
+                            InputDecoration(
+                              hintText: hint,
+                              hintStyle: TextStyle(color: Colors.grey[600]),
+                              filled: true,
+                              fillColor: Colors.grey[200],
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 14,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                            );
+
+                        return Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Novo plano',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+
+                              const Text('Nome *'),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: nomeController,
+                                decoration: baseDecoration(
+                                  'Digite um nome para o novo plano',
+                                ),
+                              ),
+
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text('Valor *'),
+                                        const SizedBox(height: 8),
+                                        TextFormField(
+                                          controller: valorController,
+                                          keyboardType:
+                                              const TextInputType.numberWithOptions(
+                                                decimal: true,
+                                              ),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9.,]'),
+                                            ),
+                                          ],
+                                          decoration: baseDecoration(
+                                            'R\$ 0,00',
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          'Valor em Real brasileiro(R\$)',
+                                          style: TextStyle(
+                                            color: Colors.grey[500],
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text('Forma de cobrança *'),
+                                        const SizedBox(height: 8),
+                                        DropdownButtonFormField<String>(
+                                          value: formaCobranca,
+                                          icon: const Icon(
+                                            Icons.keyboard_arrow_down_rounded,
+                                          ),
+                                          items: const [
+                                            DropdownMenuItem(
+                                              value: 'Credito',
+                                              child: Text('Credito'),
+                                            ),
+                                            DropdownMenuItem(
+                                              value: 'Débito',
+                                              child: Text('Débito'),
+                                            ),
+                                          ],
+                                          onChanged: (val) => setState(
+                                            () => formaCobranca = val,
+                                          ),
+                                          decoration: baseDecoration(
+                                            'Selecione...',
+                                          ),
+                                        ),
+                                        const SizedBox(height: 24),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 24),
+
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                          color: Colors.grey.shade300,
+                                        ),
+                                        foregroundColor: Colors.grey.shade800,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 14,
+                                        ),
+                                      ),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: const Text('Fechar'),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(
+                                          0xFF6B46C1,
+                                        ),
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 14,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        // Print dos valores dos formulários
+                                        // ignore: avoid_print
+                                        print('Nome: ' + (nomeController.text));
+                                        // ignore: avoid_print
+                                        print(
+                                          'Valor: ' + (valorController.text),
+                                        );
+                                        // ignore: avoid_print
+                                        print(
+                                          'Forma de cobrança: ' +
+                                              (formaCobranca ?? ''),
+                                        );
+                                      },
+                                      child: const Text('Adicionar plano'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
           SizedBox(height: 16),
-          Text(
-            'Dashboard',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF6B46C1),
+          TextButton(
+            onPressed: () {
+              Navigator.of(Get.context!).push(
+                MaterialPageRoute(
+                  builder: (_) => const _EmbalagemProdutoPage(),
+                ),
+              );
+            },
+            child: const Text(
+              'Dashboard',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF6B46C1),
+              ),
             ),
           ),
           SizedBox(height: 8),
@@ -353,7 +579,7 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      Icon(Icons.auto_awesome_mosaic_outlined),
+                      Image.asset('assets/open_box.png'),
                       SizedBox(width: 4),
                       const Text(
                         'Todos os produtos',
@@ -1286,6 +1512,313 @@ class _PageSegmentsIndicator extends StatelessWidget {
             }),
           );
         },
+      ),
+    );
+  }
+}
+
+// -----------------------------
+// Nova tela: Embalagem do Produto
+// -----------------------------
+class _EmbalagemProdutoPage extends StatefulWidget {
+  const _EmbalagemProdutoPage({Key? key}) : super(key: key);
+
+  @override
+  State<_EmbalagemProdutoPage> createState() => _EmbalagemProdutoPageState();
+}
+
+class _EmbalagemProdutoPageState extends State<_EmbalagemProdutoPage> {
+  final _nomeController = TextEditingController();
+  final _alturaController = TextEditingController();
+  final _larguraController = TextEditingController();
+  final _comprimentoController = TextEditingController();
+
+  String _formato = 'Caixa/pacote';
+
+  InputDecoration _decoration({required String hint}) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(color: Colors.grey[600]),
+      filled: true,
+      fillColor: Colors.grey[200],
+      isDense: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.grey.shade300),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _alturaController.dispose();
+    _larguraController.dispose();
+    _comprimentoController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const primary = Color(0xFF6B46C1);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        title: const Text(
+          'Embalagem do Produto',
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.black87),
+            onPressed: () => Navigator.of(context).pop(),
+            tooltip: 'Fechar',
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Formato da embalagem',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: _FormatChoice(
+                        label: 'Caixa/pacote',
+                        selected: _formato == 'Caixa/pacote',
+                        onTap: () => setState(() => _formato = 'Caixa/pacote'),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: _FormatChoice(
+                        label: 'Rolo/prisma',
+                        selected: _formato == 'Rolo/prisma',
+                        onTap: () => setState(() => _formato = 'Rolo/prisma'),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 140),
+                child: Image.asset(
+                  'assets/box_sizes.png',
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+              const Text('Crie um nome para a embalagem'),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 40,
+                child: TextFormField(
+                  controller: _nomeController,
+                  inputFormatters: [LengthLimitingTextInputFormatter(40)],
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: _decoration(hint: ''),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Máximo de 40 caracteres.',
+                style: TextStyle(color: Colors.grey[500], fontSize: 12),
+              ),
+
+              const SizedBox(height: 16),
+              const Text('Altura (A) *'),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 40,
+                child: TextFormField(
+                  controller: _alturaController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: _decoration(hint: ''),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Em centímetros. Máximo 105cm e mínimo 2cm.',
+                style: TextStyle(color: Colors.grey[500], fontSize: 12),
+              ),
+
+              const SizedBox(height: 16),
+              const Text('Largura (L) *'),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 40,
+                child: TextFormField(
+                  controller: _larguraController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: _decoration(hint: ''),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Em centímetros. Máximo 105cm e mínimo 11cm.',
+                style: TextStyle(color: Colors.grey[500], fontSize: 12),
+              ),
+
+              const SizedBox(height: 16),
+              const Text('Comprimento (C) *'),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 40,
+                child: TextFormField(
+                  controller: _comprimentoController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: _decoration(hint: ''),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Em centímetros. Máximo 105cm e mínimo 16cm.',
+                style: TextStyle(color: Colors.grey[500], fontSize: 12),
+              ),
+
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Colors.grey.shade300),
+                        foregroundColor: Colors.black87,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Fechar'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () {
+                        // ignore: avoid_print
+                        print('Formato: ' + _formato);
+                        // ignore: avoid_print
+                        print('Nome: ' + _nomeController.text);
+                        // ignore: avoid_print
+                        print('Altura (A): ' + _alturaController.text);
+                        // ignore: avoid_print
+                        print('Largura (L): ' + _larguraController.text);
+                        // ignore: avoid_print
+                        print(
+                          'Comprimento (C): ' + _comprimentoController.text,
+                        );
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Salvar'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FormatChoice extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  const _FormatChoice({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const primary = Color(0xFF6B46C1);
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 18,
+            height: 18,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: selected ? primary : Colors.grey.shade400,
+                width: 2,
+              ),
+            ),
+            child: selected
+                ? Center(
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: const BoxDecoration(
+                        color: primary,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  )
+                : null,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: TextStyle(
+              color: selected ? primary : Colors.black54,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }
